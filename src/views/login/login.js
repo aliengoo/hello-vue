@@ -76,7 +76,7 @@ export default {
               <div class="clearfix"></div>
 
               <div v-if="error" class="error-container">
-                <alert-danger title="Login error" :content="error">
+                <alert-danger :content="error">
                 </alert-danger>
               </div>
 
