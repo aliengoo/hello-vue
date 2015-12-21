@@ -1,34 +1,20 @@
-import _ from 'lodash';
-
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import home from './views/home/home';
+import about from './views/about/about';
+Vue.use(VueRouter);
 
-import HelloWorld from './components/HelloWorld';
-import FormGroup from './components/FormGroup';
+var router = new VueRouter();
 
-// bootstrap vue
-var vm = new Vue({
-  el: '#app',
-  components: {HelloWorld, FormGroup},
-  data: {
-    message: ""
+var app = Vue.extend({});
+
+router.map({
+  '/': {
+    component: home
   },
-  template: `
-      <div>
-        <div class="animated" v-bind:class="{'fadeIn': message}">
-          <hello-world v-bind:my-message="message"></hello-world>
-        </div>
-        <form-group label="Message">
-          <input class="form-control" type="text" v-model="message">
-        </form-group>
-      </div>
-   `
+  '/about': {
+    component: about
+  }
 });
 
-function handleNewMessage(newMessage) {
-  console.log("newMessage:" + newMessage);
-}
-
-var proxy = _.debounce(handleNewMessage, 1000);
-
-vm.$watch('message', proxy);
+router.start(app, '#app');
