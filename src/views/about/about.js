@@ -1,22 +1,20 @@
 "use strict";
-import Q from 'q';
+
 import pageHeader from '../../components/page-header';
 import row from '../../components/row';
 import container from '../../components/container';
+import navbar from '../../components/navbar';
 
 export default {
-  components: {pageHeader, row, container},
-  route: {
-    canActivate: (transition) => {
-      console.log("hello");
-      return Q.reject();
-    }
-  },
+  components: {pageHeader, row, container, navbar},
   template: `
-      <container>
-        <row>
-          <page-header>About</page-header>
-        </row>
-      </container>
+      <div>
+        <navbar route-name="about"></navbar>
+        <container>
+          <row>
+            <page-header>About</page-header>
+          </row>
+        </container>
+      </div>
     `
 };
