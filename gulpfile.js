@@ -7,6 +7,7 @@ var lp = require('gulp-load-plugins')({
 var browserify = require('browserify');
 var babelify = require('babelify');
 var watchify = require('watchify');
+var vueify = require('vueify');
 var path = require('path');
 var source = require('vinyl-source-stream');
 
@@ -25,6 +26,35 @@ gulp.task('vendor:css', function () {
     .pipe(lp.concat('vendor.css'))
     .pipe(gulp.dest("public/css"));
 });
+
+gulp.task('build:css', function () {
+
+  // pipe the target file to the
+  var mainFile = ["src/app.scss"];
+  var imports = [
+    "!" + mainFile[0],
+    'src/**/*.scss'
+  ];
+
+  return gulp.src(mainFile)
+    .pipe(lp.inject(gulp.src(imports, {read: false}), {
+      relative: true,
+      starttag: '/* inject:imports */',
+      endtag: '/* endinject */',
+      transform: function (filePath) {
+        return '@import "' + filePath + '";';
+      }
+    }))
+    .pipe(lp.sass())
+    .pipe(lp.autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+    }))
+    .pipe(lp.minifyCss())
+    .pipe(gulp.dest("public/css"))
+    .pipe(lp.livereload());
+});
+
 
 gulp.task("build:js", function (done) {
   var args = watchify.args;
@@ -54,7 +84,7 @@ gulp.task("build:js", function (done) {
   });
 });
 
-gulp.task('default', ['vendor:css', 'build:js'], function () {
+gulp.task('default', ['vendor:css', 'build:css', 'build:js'], function () {
   lp.livereload({
     start: true
   });
