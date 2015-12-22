@@ -11,20 +11,20 @@ import alertDanger from '../../components/alert-danger';
 
 let authenticationApi = new AuthenticationApi();
 
-export default {
-  components: {container, pageHeader, row, formGroup, alertDanger},
-  data: function () {
-    return {
-      isLoading: false,
-      error: "",
-      username: "",
-      password: ""
-    };
-  },
-  methods: {
-    onLogin: function () {
-      this.isLoading = true;
+var data = () => {
+  return {
+    isLoading: false,
+    error: "",
+    username: "",
+    password: ""
+  }
+};
 
+var methods = {
+  onLogin: function () {
+    this.isLoading = true;
+
+    Vue.nextTick(() => {
       authenticationApi.authenticate(this.username, this.password).then(() => {
         this.$route.router.go('about');
         this.isLoading = false;
@@ -32,9 +32,14 @@ export default {
         this.error = response.data.error;
         this.isLoading = false;
       });
+    });
+  }
+};
 
-    }
-  },
+export default {
+  components: {container, pageHeader, row, formGroup, alertDanger},
+  data,
+  methods,
   template: `
     <container>
       <div class="col-lg-offset-5 col-lg-3">
@@ -72,6 +77,7 @@ export default {
                 @click="onLogin"
                 class="btn btn-primary btn-lg pull-right"
                 :disabled="!$loginFormValidator.valid || isLoading">Login</button>
+                <pre>{{isLoading}}</pre>
 
               <div class="clearfix"></div>
 

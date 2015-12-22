@@ -5,6 +5,7 @@ var lp = require('gulp-load-plugins')({
   lazy: true
 });
 var browserify = require('browserify');
+var exorcist   = require('exorcist');
 var babelify = require('babelify');
 var watchify = require('watchify');
 var vueify = require('vueify');
@@ -59,10 +60,15 @@ gulp.task('build:css', function () {
 gulp.task("build:js", function (done) {
   var args = watchify.args;
   args.extensions = ['.js'];
+  args.debug = true;
+
+  var dest = "./public/js";
+  var mapfile = path.join(dest, "app.js.map");
 
   watchify(browserify(path.join("./src", "main.js"), args), args)
     .transform(babelify)
     .bundle()
+    .pipe(exorcist(mapfile))
     .on('error', function(err){
       console.error(err.message);
       notifier.notify({
@@ -73,7 +79,7 @@ gulp.task("build:js", function (done) {
       done();
     })
     .pipe(source("app.js"))
-    .pipe(gulp.dest("./public/js"))
+    .pipe(gulp.dest(dest))
     .pipe(lp.livereload()).on('end', function(){
     notifier.notify({
       title: "build:js",
