@@ -1,3 +1,4 @@
+import toastr from 'toastr';
 import Vue from 'vue';
 import _ from 'lodash';
 
@@ -6,30 +7,30 @@ import pageHeader from '../../components/page-header';
 
 import row from '../../components/row';
 import formGroup from '../../components/form-group';
-import AuthenticationApi from '../../common/AuthenticationApi';
+import authenticationApi from '../../common/AuthenticationApi';
 import alertDanger from '../../components/alert-danger';
-
-let authenticationApi = new AuthenticationApi();
 
 var data = () => {
   return {
     isLoading: false,
+    usernameExists: false,
     error: "",
     username: "",
     password: ""
-  }
+  };
 };
 
 var methods = {
   onLogin: function () {
     this.isLoading = true;
 
-    Vue.nextTick(() => {
+    this.$nextTick(() => {
       authenticationApi.authenticate(this.username, this.password).then(() => {
-        this.$route.router.go('about');
+        this.$route.router.go('/a/about');
         this.isLoading = false;
       }).catch((response) => {
         this.error = response.data.error;
+        toastr.error(this.error, "Login Error");
         this.isLoading = false;
       });
     });
@@ -77,7 +78,6 @@ export default {
                 @click="onLogin"
                 class="btn btn-primary btn-lg pull-right"
                 :disabled="!$loginFormValidator.valid || isLoading">Login</button>
-                <pre>{{isLoading}}</pre>
 
               <div class="clearfix"></div>
 

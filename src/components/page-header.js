@@ -10,4 +10,4 @@ export default {
         </h1>
       </header>
     `
-}
+};

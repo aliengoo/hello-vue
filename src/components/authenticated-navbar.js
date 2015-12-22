@@ -1,8 +1,25 @@
 "use strict";
 
+import authenticationApi from '../common/authenticationApi';
+
 export default {
+  methods: {
+    onLogout: function () {
+      this.isLoading = true;
+
+      this.$nextTick(() => {
+        authenticationApi.logout().then(() => {
+          this.$route.router.go('/n/login');
+          this.isLoading = false;
+        }).catch(() => {
+          this.isLoading = false;
+        });
+      });
+    }
+  },
   data: function () {
     return {
+      isLoading: false,
       routeName: this.$route.name
     };
   },
@@ -18,6 +35,9 @@ export default {
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">Hello, Vue</a>
+        </div>
+        <div class="nav navbar-nav navbar-right">
+          <button class="btn btn-primary btn-sm logout-btn" @click="onLogout" :disabled="isLoading">Logout</button>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->

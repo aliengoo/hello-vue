@@ -1,9 +1,7 @@
 import axios from 'axios';
 import store from 'store';
 import Q from 'q';
-import AuthenticationApi from './AuthenticationApi';
-
-let authenticationApi = new AuthenticationApi();
+import authenticationApi from './AuthenticationApi';
 
 axios.interceptors.request.use((config) => {
   var token = authenticationApi.getToken();

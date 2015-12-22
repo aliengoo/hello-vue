@@ -20,6 +20,7 @@ var notifier = new WindowsToaster({
 gulp.task('vendor:css', function () {
   var src = [
     'node_modules/bootstrap/dist/css/bootstrap.css',
+    'node_modules/toastr/build/toastr.css',
     'node_modules/animate.css/animate.css'
   ];
 
